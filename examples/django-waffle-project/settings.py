@@ -52,3 +52,14 @@ WAFFLE_FLAG_DEFAULT = False
 WAFFLE_SWITCH_DEFAULT = False
 WAFFLE_SAMPLE_DEFAULT = False
 WAFFLE_OVERRIDE = False
+
+TEMPLATE_LOADERS = (
+    'jingo.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+
+JINGO_EXCLUDE_APS = (
+    'django',
+    'waffle',
+)

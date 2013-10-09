@@ -1,5 +1,5 @@
 from django.core.cache import cache
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 
 from waffle import (keyfmt, flag_is_active, sample_is_active,
@@ -32,13 +32,14 @@ def wafflejs(request):
     switch_default = getattr(settings, 'WAFFLE_SWITCH_DEFAULT', False)
     sample_default = getattr(settings, 'WAFFLE_SAMPLE_DEFAULT', False)
 
-    return render_to_response('waffle/waffle.js',
-                              {
-                                'flags': flag_values,
-                                'switches': switches,
-                                'samples': sample_values,
-                                'flag_default': flag_default,
-                                'switch_default': switch_default,
-                                'sample_default': sample_default,
-                              },
-                              mimetype='application/x-javascript')
+    return render(request,
+                  'waffle/waffle.js',
+                  {
+                    'flags': flag_values,
+                    'switches': switches,
+                    'samples': sample_values,
+                    'flag_default': flag_default,
+                    'switch_default': switch_default,
+                    'sample_default': sample_default,
+                  },
+                  content_type='application/x-javascript')
