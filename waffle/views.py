@@ -13,8 +13,12 @@ from django.conf import settings
 def wafflejs(request):
     flags = cache.get(keyfmt(FLAGS_ALL_CACHE_KEY))
     if not flags:
-        flags = Flag.objects.values_list('name', flat=True)
-        cache.add(keyfmt(FLAGS_ALL_CACHE_KEY), flags)
+        flags = list(Flag.objects.values_list('name', flat=True))
+        print "flags %r" % flags
+        key = unicode(keyfmt(FLAGS_ALL_CACHE_KEY))
+        print "key %r" % key
+        cache.add(key, flags)
+        #cache.add(u'foo', [u'bar'])
     flag_values = [(f, flag_is_active(request, f)) for f in flags]
 
     switches = cache.get(keyfmt(SWITCHES_ALL_CACHE_KEY))
