@@ -13,23 +13,19 @@ from django.conf import settings
 def wafflejs(request):
     flags = cache.get(keyfmt(FLAGS_ALL_CACHE_KEY))
     if not flags:
-        flags = list(Flag.objects.values_list('name', flat=True))
-        print "flags %r" % flags
-        key = unicode(keyfmt(FLAGS_ALL_CACHE_KEY))
-        print "key %r" % key
-        cache.add(key, flags)
-        #cache.add(u'foo', [u'bar'])
+        flags = Flag.objects.values_list('name', flat=True)
+        cache.add(keyfmt(FLAGS_ALL_CACHE_KEY), list(flags))
     flag_values = [(f, flag_is_active(request, f)) for f in flags]
 
     switches = cache.get(keyfmt(SWITCHES_ALL_CACHE_KEY))
     if not switches:
         switches = Switch.objects.values_list('name', 'active')
-        cache.add(keyfmt(SWITCHES_ALL_CACHE_KEY), switches)
+        cache.add(keyfmt(SWITCHES_ALL_CACHE_KEY), list(switches))
 
     samples = cache.get(keyfmt(SAMPLES_ALL_CACHE_KEY))
     if not samples:
         samples = Sample.objects.values_list('name', flat=True)
-        cache.add(keyfmt(SAMPLES_ALL_CACHE_KEY), samples)
+        cache.add(keyfmt(SAMPLES_ALL_CACHE_KEY), list(samples))
     sample_values = [(s, sample_is_active(s)) for s in samples]
 
     flag_default = getattr(settings, 'WAFFLE_FLAG_DEFAULT', False)

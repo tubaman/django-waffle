@@ -92,22 +92,6 @@ def flag_is_active(request, flag_name):
                 request.LANGUAGE_CODE in languages):
             return True
 
-    flag_users = cache.get(keyfmt(FLAG_USERS_CACHE_KEY, flag.name))
-    if flag_users is None:
-        flag_users = flag.users.all()
-        cache_flag(instance=flag)
-    if user in flag_users:
-        return True
-
-    flag_groups = cache.get(keyfmt(FLAG_GROUPS_CACHE_KEY, flag.name))
-    if flag_groups is None:
-        flag_groups = flag.groups.all()
-        cache_flag(instance=flag)
-    user_groups = user.groups.all()
-    for group in flag_groups:
-        if group in user_groups:
-            return True
-
     if flag.percent > 0:
         if not hasattr(request, 'waffles'):
             request.waffles = {}
@@ -159,8 +143,6 @@ def cache_flag(**kwargs):
     if not action or action in ['post_add', 'post_remove', 'post_clear']:
         f = kwargs.get('instance')
         cache.add(keyfmt(FLAG_CACHE_KEY, f.name), f)
-        cache.add(keyfmt(FLAG_USERS_CACHE_KEY, f.name), f.users.all())
-        cache.add(keyfmt(FLAG_GROUPS_CACHE_KEY, f.name), f.groups.all())
 
 
 def uncache_flag(**kwargs):
@@ -175,10 +157,6 @@ def uncache_flag(**kwargs):
 
 post_save.connect(uncache_flag, sender=Flag, dispatch_uid='save_flag')
 post_delete.connect(uncache_flag, sender=Flag, dispatch_uid='delete_flag')
-m2m_changed.connect(uncache_flag, sender=Flag.users.through,
-                    dispatch_uid='m2m_flag_users')
-m2m_changed.connect(uncache_flag, sender=Flag.groups.through,
-                    dispatch_uid='m2m_flag_groups')
 
 
 def cache_sample(**kwargs):

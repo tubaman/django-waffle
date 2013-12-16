@@ -35,10 +35,6 @@ class Flag(models.Model):
     languages = models.TextField(blank=True, default='', help_text=(
         'Activate this flag for users with one of these languages (comma '
         'separated list)'))
-    groups = models.ManyToManyField(Group, blank=True, help_text=(
-        'Activate this flag for these user groups.'))
-    users = models.ManyToManyField(User, blank=True, help_text=(
-        'Activate this flag for these users.'))
     rollout = models.BooleanField(default=False, help_text=(
         'Activate roll-out mode?'))
     note = models.TextField(blank=True, help_text=(
