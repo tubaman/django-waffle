@@ -11,22 +11,24 @@ from django.conf import settings
 
 @never_cache
 def wafflejs(request):
-    flags = cache.get(keyfmt(FLAGS_ALL_CACHE_KEY))
-    if not flags:
-        flags = Flag.objects.values_list('name', flat=True)
-        cache.add(keyfmt(FLAGS_ALL_CACHE_KEY), list(flags))
-    flag_values = [(f, flag_is_active(request, f)) for f in flags]
+    #flags = cache.get(keyfmt(FLAGS_ALL_CACHE_KEY))
+    #if not flags:
+    #    flags = Flag.objects.values_list('name', flat=True)
+    #    cache.add(keyfmt(FLAGS_ALL_CACHE_KEY), list(flags))
+    #flag_values = [(f, flag_is_active(request, f)) for f in flags]
+    flag_values = []
 
     switches = cache.get(keyfmt(SWITCHES_ALL_CACHE_KEY))
     if not switches:
         switches = Switch.objects.values_list('name', 'active')
         cache.add(keyfmt(SWITCHES_ALL_CACHE_KEY), list(switches))
 
-    samples = cache.get(keyfmt(SAMPLES_ALL_CACHE_KEY))
-    if not samples:
-        samples = Sample.objects.values_list('name', flat=True)
-        cache.add(keyfmt(SAMPLES_ALL_CACHE_KEY), list(samples))
-    sample_values = [(s, sample_is_active(s)) for s in samples]
+    #samples = cache.get(keyfmt(SAMPLES_ALL_CACHE_KEY))
+    #if not samples:
+    #    samples = Sample.objects.values_list('name', flat=True)
+    #    cache.add(keyfmt(SAMPLES_ALL_CACHE_KEY), list(samples))
+    #sample_values = [(s, sample_is_active(s)) for s in samples]
+    sample_values = []
 
     flag_default = getattr(settings, 'WAFFLE_FLAG_DEFAULT', False)
     switch_default = getattr(settings, 'WAFFLE_SWITCH_DEFAULT', False)
