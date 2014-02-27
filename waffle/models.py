@@ -59,15 +59,16 @@ class Switch(models.Model):
 
     """
     name = models.CharField(max_length=100, unique=True,
-                            help_text='The human/computer readable name.')
+                            help_text='The human/computer readable name.',
+                            db_index=True)
     active = models.BooleanField(default=False, help_text=(
-        'Is this flag active?'))
+        'Is this flag active?'), db_index=True)
     note = models.TextField(blank=True, help_text=(
-        'Note where this Switch is used.'))
+        'Note where this Switch is used.'), db_index=True)
     created = models.DateTimeField(default=datetime.now, db_index=True,
         help_text=('Date when this Switch was created.'))
     modified = models.DateTimeField(default=datetime.now, help_text=(
-        'Date when this Switch was last modified.'))
+        'Date when this Switch was last modified.'), db_index=True)
 
     def __unicode__(self):
         return u'%s: %s' % (self.name, 'on' if self.active else 'off')
